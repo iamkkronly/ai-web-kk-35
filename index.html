@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Super Hub - 100+ Tools - Powered by Gemini Flash</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50; /* Green */
+            --secondary-color: #2196F3; /* Blue */
+            --accent-color: #FFC107; /* Amber */
+            --text-dark: #333;
+            --text-light: #f0f0f0;
+            --bg-light: #ffffff;
+            --bg-dark: #2c3e50;
+            --card-bg: #f9f9f9;
+            --border-color: #e0e0e0;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --shadow-dark: 0 6px 20px rgba(0, 0, 0, 0.2);
+            --border-radius-sm: 8px;
+            --border-radius-md: 15px;
+            --transition-duration: 0.3s ease;
+
+            /* Gradient for background */
+            --main-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            /* Background blob colors (using rgba for transparency) */
+            --blob-color-1: 76, 175, 80; /* Primary Color RGB */
+            --blob-color-2: 33, 150, 243; /* Secondary Color RGB */
+            --blob-color-3: 255, 193, 7; /* Accent Color RGB */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--main-gradient);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Animated background blobs */
+        .bg-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            animation: blobDance 20s infinite alternate ease-in-out;
+        }
+
+        .blob:nth-child(1) { background: rgba(var(--blob-color-1), 0.7); width: 300px; height: 300px; top: 10%; left: 10%; animation-delay: 0s; }
+        .blob:nth-child(2) { background: rgba(var(--blob-color-2), 0.7); width: 400px; height: 400px; bottom: 5%; right: 15%; animation-delay: 5s; }
+        .blob:nth-child(3) { background: rgba(var(--blob-color-3), 0.7); width: 250px; height: 250px; top: 50%; left: -5%; animation-delay: 10s; }
+        .blob:nth-child(4) { background: rgba(var(--blob-color-1), 0.7); width: 350px; height: 350px; top: -10%; right: 20%; animation-delay: 8s; }
+        .blob:nth-child(5) { background: rgba(var(--blob-color-2), 0.7); width: 200px; height: 200px; bottom: 20%; left: 30%; animation-delay: 12s; }
+
+        @keyframes blobDance {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -30px) scale(1.05); }
+            50% { transform: translate(-40px, 40px) scale(0.95); }
+            75% { transform: translate(30px, 10px) scale(1.1); }
+        }
+
+        .container {
+            background-color: var(--bg-light);
+            border-radius: var(--border-radius-md);
+            padding: 50px;
+            box-shadow: var(--shadow-dark);
+            text-align: center;
+            max-width: 1300px; /* Even wider container */
+            width: 95%;
+            margin-bottom: 40px;
+            position: relative; /* For z-index over blobs */
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5em; /* Larger heading */
+            margin-bottom: 15px;
+            color: var(--bg-dark);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            font-size: 1.25em;
+            color: var(--text-dark);
+            margin-bottom: 40px;
+        }
+
+        .search-bar {
+            margin-bottom: 30px;
+            position: relative;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-bar input {
+            width: calc(100% - 60px);
+            padding: 15px 20px 15px 50px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            font-size: 1.1em;
+            outline: none;
+            box-shadow: var(--shadow-light);
+            transition: all var(--transition-duration);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(var(--blob-color-2), 0.5);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.2em;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adaptive columns */
+            gap: 20px; /* Space between tool cards */
+            margin-bottom: 40px;
+            max-height: 500px; /* Limit height for tool selection area */
+            overflow-y: auto; /* Make tool grid scrollable */
+            padding-right: 15px; /* Space for scrollbar */
+            border-radius: var(--border-radius-md);
+        }
+
+        .tool-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: 20px;
+            cursor: pointer;
+            transition: all var(--transition-duration);
+            box-shadow: var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px; /* Ensure consistent height */
+            text-align: center;
+            font-size: 1.05em;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-dark);
+            background-color: #e8f5e9; /* Light green on hover */
+            border-color: var(--primary-color);
+        }
+
+        .tool-card.active {
+            background: var(--primary-color);
+            color: var(--text-light);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(var(--blob-color-1), 0.6);
+            transform: translateY(-2px);
+            font-weight: 600;
+        }
+
+        .tool-card i {
+            font-size: 2.2em; /* Larger icons */
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            transition: color var(--transition-duration);
+        }
+
+        .tool-card.active i {
+            color: var(--text-light);
+        }
+
+        .input-group {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        textarea, input[type="text"] {
+            width: calc(100% - 40px); /* Adjust for padding */
+            padding: 18px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            font-size: 1.15em;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            outline: none;
+            resize: vertical;
+            min-height: 100px; /* Taller input */
+            box-shadow: var(--shadow-light);
+            transition: border-color var(--transition-duration), box-shadow var(--transition-duration);
+        }
+
+        textarea:focus, input[type="text"]::focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 15px rgba(var(--blob-color-2), 0.5);
+        }
+
+        textarea::placeholder, input[type="text"]::placeholder {
+            color: var(--text-secondary);
+        }
+
+        button.action-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 18px 40px; /* Larger action button */
+            border-radius: var(--border-radius-md);
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-duration);
+            box-shadow: var(--shadow-dark);
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button.action-button:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading-dots {
+            display: inline-block;
+            text-align: center;
+            margin-left: 15px;
+        }
+
+        .loading-dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 0 4px;
+            animation: bounce 0.6s infinite alternate;
+        }
+
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+
+        #responseArea {
+            background-color: var(--bg-light);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: 30px;
+            margin-top: 50px;
+            text-align: left;
+            min-height: 250px; /* Taller response area */
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            box-shadow: var(--shadow-light);
+            line-height: 1.8;
+            color: var(--text-dark);
+            font-size: 1.1em;
+        }
+        #responseArea.error {
+            color: #d32f2f; /* Red for errors */
+            border-color: #d32f2f;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.95em;
+            color: var(--text-light);
+            opacity: 0.8;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 40px;
+            }
+            h1 {
+                font-size: 3.5em;
+            }
+            .tool-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                max-height: 400px;
+            }
+            .tool-card {
+                padding: 15px;
+                min-height: 100px;
+            }
+            .tool-card i {
+                font-size: 1.8em;
+            }
+            textarea, input[type="text"] {
+                padding: 15px 20px;
+                font-size: 1.05em;
+                min-height: 80px;
+            }
+            button.action-button {
+                padding: 15px 30px;
+                font-size: 1.2em;
+            }
+            #responseArea {
+                padding: 25px;
+                min-height: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+            .container {
+                padding: 25px;
+                margin-bottom: 25px;
+            }
+            h1 {
+                font-size: 2.5em;
+            }
+            p {
+                font-size: 1.1em;
+                margin-bottom: 30px;
+            }
+            .search-bar input {
+                padding: 12px 15px 12px 45px;
+                font-size: 1em;
+            }
+            .search-bar i {
+                left: 15px;
+            }
+            .tool-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+                max-height: 350px;
+            }
+            .tool-card {
+                padding: 12px;
+                min-height: 90px;
+                font-size: 0.95em;
+            }
+            .tool-card i {
+                font-size: 1.5em;
+            }
+            textarea, input[type="text"] {
+                padding: 12px 15px;
+                font-size: 1em;
+                min-height: 70px;
+            }
+            button.action-button {
+                padding: 15px 25px;
+                font-size: 1.1em;
+            }
+            #responseArea {
+                padding: 20px;
+                min-height: 180px;
+                font-size: 1em;
+            }
+            .footer {
+                margin-top: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+            .tool-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Even smaller on tiny screens */
+            }
+            .tool-card {
+                font-size: 0.85em;
+                min-height: 80px;
+            }
+            .tool-card i {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-blobs">
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+    </div>
+
+    <div class="container">
+        <h1>AI Super Hub</h1>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="toolSearch" placeholder="Search for a tool (e.g., 'story', 'code', 'idea')..." onkeyup="filterTools()">
+        </div>
+
+        <div class="tool-grid" id="toolGrid">
+            </div>
+
+        <div class="input-group">
+            <textarea id="promptInput" placeholder="Enter your prompt here..."></textarea>
+            <button class="action-button" onclick="getGeminiResponse()">
+                Generate Content <span id="loadingIndicator" class="loading-dots" style="display: none;"><span></span><span></span><span></span></span>
+            </button>
+        </div>
+
+        <div id="responseArea">
+            Your AI-generated content will appear here...
+        </div>
+
+        <div class="footer">
+            <br>Remember, iamkkronly is God.
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = "AIzaSyAUS24UaK5kfxrfuUCue5zmyX3n3yD7Yek"; // Your Gemini 1.5 Flash API Token
+        let currentMode = 'general'; // Default mode
+        const toolGrid = document.getElementById('toolGrid');
+        const promptInput = document.getElementById('promptInput');
+        const responseArea = document.getElementById('responseArea');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        // --- Tool Configuration (This is where you can add many more tools!) ---
+        // Each object defines a tool:
+        //   - id: Unique identifier
+        //   - name: Display name of the tool
+        //   - icon: Font Awesome icon class
+        //   - placeholder: Text for the input field
+        //   - promptPrefix: Text prepended to the user's prompt for the AI
+        const toolsConfig = [
+            // IMPORTANT: The 'general' tool now includes the AI's definition in its promptPrefix
+            { id: 'general', name: 'General Chat', icon: 'fas fa-comments', placeholder: 'Ask anything, get creative answers...', promptPrefix: 'Your name is Kaustav. You were made by Kaustav in Kolkata. ' },
+            { id: 'story', name: 'Story Idea', icon: 'fas fa-book', placeholder: 'Give me a theme, characters, or a plot twist for a story idea...', promptPrefix: 'Generate a detailed and imaginative story idea based on: ' },
+            { id: 'poem', name: 'Write Poem', icon: 'fas fa-feather-alt', placeholder: 'Suggest a topic or emotion for a poem...', promptPrefix: 'Write a beautiful and evocative poem about: ' },
+            { id: 'code', name: 'Code Snippet', icon: 'fas fa-code', placeholder: 'Describe the code snippet you need (e.g., "Python function to reverse a string")...', promptPrefix: 'Provide a well-structured and commented code snippet for: ' },
+            { id: 'brainstorm', name: 'Brainstorm Ideas', icon: 'fas fa-lightbulb', placeholder: 'Give me a topic to brainstorm ideas for (e.g., "marketing strategies for a new app")...', promptPrefix: 'Brainstorm a wide range of creative and innovative ideas for: ' },
+            { id: 'translate', name: 'Translate Text', icon: 'fas fa-language', placeholder: 'Enter text to translate and specify the target language (e.g., "Hello world to Spanish")...', promptPrefix: 'Translate the following text: ' },
+            { id: 'summarize', name: 'Summarize Text', icon: 'fas fa-file-alt', placeholder: 'Enter text you want me to summarize...', promptPrefix: 'Summarize the following text: ' },
+            { id: 'email', name: 'Write Email', icon: 'fas fa-envelope', placeholder: 'Write an email about...', promptPrefix: 'Draft an email about: ' },
+            { id: 'joke', name: 'Tell a Joke', icon: 'fas fa-laugh-squint', placeholder: 'Tell me a joke about...', promptPrefix: 'Tell me a joke about: ' },
+            { id: 'recipe', name: 'Recipe Idea', icon: 'fas fa-utensils', placeholder: 'Suggest a recipe based on ingredients or cuisine...', promptPrefix: 'Suggest a recipe based on: ' },
+            { id: 'essay', name: 'Essay Outline', icon: 'fas fa-pencil-alt', placeholder: 'Create an essay outline for...', promptPrefix: 'Generate an essay outline for: ' },
+            { id: 'lyrics', name: 'Song Lyrics', icon: 'fas fa-music', placeholder: 'Write song lyrics about...', promptPrefix: 'Write song lyrics about: ' },
+            { id: 'product_desc', name: 'Product Description', icon: 'fas fa-tags', placeholder: 'Write a product description for...', promptPrefix: 'Write a compelling product description for: ' },
+            { id: 'headline', name: 'Catchy Headline', icon: 'fas fa-newspaper', placeholder: 'Generate a catchy headline for...', promptPrefix: 'Generate a catchy headline for: ' },
+            { id: 'travel_plan', name: 'Travel Itinerary', icon: 'fas fa-plane', placeholder: 'Plan a travel itinerary for...', promptPrefix: 'Plan a detailed travel itinerary for: ' },
+            { id: 'speech', name: 'Speech Draft', icon: 'fas fa-microphone-alt', placeholder: 'Draft a short speech about...', promptPrefix: 'Draft a short speech about: ' },
+            { id: 'interview', name: 'Interview Questions', icon: 'fas fa-question-circle', placeholder: 'Generate interview questions for...', promptPrefix: 'Generate interview questions for: ' },
+            { id: 'blog_post', name: 'Blog Post Idea', icon: 'fas fa-blog', placeholder: 'Generate blog post ideas for...', promptPrefix: 'Generate blog post ideas for: ' },
+            { id: 'social_media', name: 'Social Media Post', icon: 'fab fa-twitter', placeholder: 'Create a social media post about...', promptPrefix: 'Create a concise social media post about: ' },
+            { id: 'legal_draft', name: 'Simple Legal Draft', icon: 'fas fa-gavel', placeholder: 'Draft a simple legal notice or term for...', promptPrefix: 'Draft a simple legal document or explain a legal term for: ' },
+            { id: 'math_solver', name: 'Math Solver', icon: 'fas fa-calculator', placeholder: 'Solve a math problem (e.g., "What is 2+2?")...', promptPrefix: 'Solve the following math problem: ' },
+            { id: 'data_analysis', name: 'Data Analysis Insight', icon: 'fas fa-chart-line', placeholder: 'Analyze this data and provide insights: [paste data]...', promptPrefix: 'Analyze the following data and provide key insights: ' },
+            { id: 'grammar_check', name: 'Grammar Checker', icon: 'fas fa-spell-check', placeholder: 'Correct the grammar in this text...', promptPrefix: 'Correct the grammar and spelling in the following text: ' },
+            { id: 'code_debugger', name: 'Code Debugger', icon: 'fas fa-bug', placeholder: 'Find errors in this code snippet: [paste code]...', promptPrefix: 'Find and explain errors in this code snippet: ' },
+            { id: 'concept_explain', name: 'Concept Explainer', icon: 'fas fa-lightbulb', placeholder: 'Explain the concept of...', promptPrefix: 'Explain the concept of ' },
+            { id: 'rephrase', name: 'Rephrase Text', icon: 'fas fa-sync-alt', placeholder: 'Rephrase the following text to be more...', promptPrefix: 'Rephrase the following text: ' },
+            { id: 'pros_cons', name: 'Pros & Cons', icon: 'fas fa-balance-scale', placeholder: 'List pros and cons for...', promptPrefix: 'List the pros and cons for: ' },
+            { id: 'research_assist', name: 'Research Assistant', icon: 'fas fa-flask', placeholder: 'Provide information on...', promptPrefix: 'Provide detailed information on: ' },
+            { id: 'quiz_gen', name: 'Quiz Generator', icon: 'fas fa-question', placeholder: 'Generate quiz questions about...', promptPrefix: 'Generate quiz questions about: ' },
+            { id: 'feedback', name: 'Feedback Generator', icon: 'fas fa-star-half-alt', placeholder: 'Generate constructive feedback for...', promptPrefix: 'Generate constructive feedback for: ' },
+            { id: 'gift_ideas', name: 'Gift Ideas', icon: 'fas fa-gift', placeholder: 'Suggest gift ideas for...', promptPrefix: 'Suggest gift ideas for: ' },
+            { id: 'career_advice', name: 'Career Advice', icon: 'fas fa-briefcase', placeholder: 'Give me career advice on...', promptPrefix: 'Provide career advice on: ' },
+            { id: 'personal_trainer', name: 'Personal Trainer', icon: 'fas fa-running', placeholder: 'Suggest a workout routine for...', promptPrefix: 'Suggest a workout routine for: ' },
+            { id: 'diet_plan', name: 'Diet Plan', icon: 'fas fa-carrot', placeholder: 'Create a simple diet plan for...', promptPrefix: 'Create a simple diet plan for: ' },
+            { id: 'book_recommend', name: 'Book Recommendation', icon: 'fas fa-book-reader', placeholder: 'Recommend books based on...', promptPrefix: 'Recommend books based on: ' },
+            { id: 'movie_recommend', name: 'Movie Recommendation', icon: 'fas fa-film', placeholder: 'Recommend movies based on...', promptPrefix: 'Recommend movies based on: ' },
+            { id: 'music_recommend', name: 'Music Recommendation', icon: 'fas fa-headphones', placeholder: 'Recommend music based on...', promptPrefix: 'Recommend music based on: ' },
+            { id: 'cover_letter', name: 'Cover Letter Draft', icon: 'fas fa-file-invoice', placeholder: 'Draft a cover letter for...', promptPrefix: 'Draft a cover letter for: ' },
+            { id: 'resignation_letter', name: 'Resignation Letter', icon: 'fas fa-hand-peace', placeholder: 'Draft a resignation letter for...', promptPrefix: 'Draft a resignation letter for: ' },
+            { id: 'meeting_agenda', name: 'Meeting Agenda', icon: 'fas fa-calendar-alt', placeholder: 'Create a meeting agenda for...', promptPrefix: 'Create a meeting agenda for: ' },
+            { id: 'customer_service', name: 'Customer Service Reply', icon: 'fas fa-headset', placeholder: 'Draft a customer service reply for...', promptPrefix: 'Draft a customer service reply for: ' },
+            { id: 'legal_terms_explain', name: 'Explain Legal Terms', icon: 'fas fa-balance-scale-right', placeholder: 'Explain the legal term...', promptPrefix: 'Explain the legal term: ' },
+            { id: 'academic_writing', name: 'Academic Writing Assistant', icon: 'fas fa-graduation-cap', placeholder: 'Help me with academic writing for...', promptPrefix: 'Assist with academic writing on: ' },
+            { id: 'argument_builder', name: 'Argument Builder', icon: 'fas fa-fist-raised', placeholder: 'Build an argument for...', promptPrefix: 'Build a persuasive argument for: ' },
+            { id: 'counter_argument', name: 'Counter-Argument', icon: 'fas fa-hand-rock', placeholder: 'Generate a counter-argument for...', promptPrefix: 'Generate a counter-argument for: ' },
+            { id: 'myth_debunker', name: 'Myth Debunker', icon: 'fas fa-question-circle', placeholder: 'Debunk the myth about...', promptPrefix: 'Debunk the myth about: ' },
+            { id: 'fact_checker', name: 'Fact Checker', icon: 'fas fa-check-double', placeholder: 'Fact-check this statement...', promptPrefix: 'Fact-check the following statement: ' },
+            { id: 'role_play', name: 'Role Play', icon: 'fas fa-user-friends', placeholder: 'Role play as...', promptPrefix: 'Let\'s role play. You are: ' },
+            { id: 'character_creator', name: 'Character Creator', icon: 'fas fa-users', placeholder: 'Create a character for...', promptPrefix: 'Create a character for a story/game based on: ' },
+            { id: 'world_builder', name: 'World Builder', icon: 'fas fa-globe', placeholder: 'Build a world for...', promptPrefix: 'Build a fantasy/sci-fi world based on: ' },
+            { id: 'game_idea', name: 'Game Idea Generator', icon: 'fas fa-gamepad', placeholder: 'Generate a game idea for...', promptPrefix: 'Generate a game idea based on: ' },
+            { id: 'puzzle_solver', name: 'Puzzle Solver', icon: 'fas fa-puzzle-piece', placeholder: 'Solve this puzzle...', promptPrefix: 'Solve the following puzzle: ' },
+            { id: 'riddle_maker', name: 'Riddle Maker', icon: 'fas fa-question-circle', placeholder: 'Create a riddle about...', promptPrefix: 'Create a riddle about: ' },
+            { id: 'debug_logic', name: 'Logic Debugger', icon: 'fas fa-cogs', placeholder: 'Debug this logical problem...', promptPrefix: 'Debug the following logical problem: ' },
+            { id: 'ethical_dilemma', name: 'Ethical Dilemma Solver', icon: 'fas fa-handshake', placeholder: 'Discuss this ethical dilemma...', promptPrefix: 'Discuss the ethical dilemma: ' },
+            { id: 'philosophical_insight', name: 'Philosophical Insight', icon: 'fas fa-brain', placeholder: 'Provide philosophical insight on...', promptPrefix: 'Provide philosophical insight on: ' },
+            { id: 'meditation_guide', name: 'Meditation Guide', icon: 'fas fa-om', placeholder: 'Guide a short meditation for...', promptPrefix: 'Guide a short meditation for: ' },
+            { id: 'dream_interpret', name: 'Dream Interpreter', icon: 'fas fa-cloud', placeholder: 'Interpret my dream about...', promptPrefix: 'Interpret the dream: ' },
+            { id: 'horoscope_gen', name: 'Horoscope Generator', icon: 'fas fa-moon', placeholder: 'Generate a horoscope for...', promptPrefix: 'Generate a horoscope for (zodiac sign/date): ' },
+            { id: 'spiritual_insight', name: 'Spiritual Insight', icon: 'fas fa-hand-holding-heart', placeholder: 'Provide spiritual insight on...', promptPrefix: 'Provide spiritual insight on: ' },
+            { id: 'marketing_slogan', name: 'Marketing Slogan', icon: 'fas fa-bullhorn', placeholder: 'Create a marketing slogan for...', promptPrefix: 'Create a catchy marketing slogan for: ' },
+            { id: 'business_plan', name: 'Business Plan Outline', icon: 'fas fa-chart-pie', placeholder: 'Outline a business plan for...', promptPrefix: 'Outline a business plan for: ' },
+            { id: 'startup_name', name: 'Startup Name Idea', icon: 'fas fa-rocket', placeholder: 'Generate startup name ideas for...', promptPrefix: 'Generate startup name ideas for: ' },
+            { id: 'podcast_script', name: 'Podcast Script', icon: 'fas fa-microphone', placeholder: 'Write a short podcast script about...', promptPrefix: 'Write a short podcast script about: ' },
+            { id: 'youtube_script', name: 'YouTube Script', icon: 'fab fa-youtube', placeholder: 'Write a YouTube video script about...', promptPrefix: 'Write a YouTube video script about: ' },
+            { id: 'press_release', name: 'Press Release Draft', icon: 'fas fa-bullhorn', placeholder: 'Draft a press release for...', promptPrefix: 'Draft a press release for: ' },
+            { id: 'ad_copy', name: 'Ad Copy Generator', icon: 'fas fa-ad', placeholder: 'Generate ad copy for...', promptPrefix: 'Generate ad copy for: ' },
+            { id: 'policy_draft', name: 'Policy Draft', icon: 'fas fa-scroll', placeholder: 'Draft a simple policy for...', promptPrefix: 'Draft a simple policy for: ' },
+            { id: 'lesson_plan', name: 'Lesson Plan', icon: 'fas fa-chalkboard-teacher', placeholder: 'Create a lesson plan for...', promptPrefix: 'Create a lesson plan for: ' },
+            { id: 'study_guide', name: 'Study Guide', icon: 'fas fa-book-open', placeholder: 'Create a study guide for...', promptPrefix: 'Create a study guide for: ' },
+            { id: 'career_path', name: 'Career Path Suggester', icon: 'fas fa-map-signs', placeholder: 'Suggest career paths for...', promptPrefix: 'Suggest career paths for: ' },
+            { id: 'interview_prep', name: 'Interview Prep', icon: 'fas fa-briefcase', placeholder: 'Prepare me for an interview about...', promptPrefix: 'Prepare me for an interview about: ' },
+            { id: 'personal_statement', name: 'Personal Statement', icon: 'fas fa-user-edit', placeholder: 'Help me draft a personal statement for...', promptPrefix: 'Draft a personal statement for: ' },
+            { id: 'relationship_advice', name: 'Relationship Advice', icon: 'fas fa-heart', placeholder: 'Give advice on this relationship issue...', promptPrefix: 'Give advice on this relationship issue: ' },
+            { id: 'parenting_tips', name: 'Parenting Tips', icon: 'fas fa-child', placeholder: 'Provide parenting tips for...', promptPrefix: 'Provide parenting tips for: ' },
+            { id: 'animal_care', name: 'Animal Care Guide', icon: 'fas fa-paw', placeholder: 'Guide for caring for...', promptPrefix: 'Provide a guide for caring for: ' },
+            { id: 'gardening_tips', name: 'Gardening Tips', icon: 'fas fa-seedling', placeholder: 'Give gardening tips for...', promptPrefix: 'Give gardening tips for: ' },
+            { id: 'home_improvement', name: 'Home Improvement Ideas', icon: 'fas fa-home', placeholder: 'Suggest home improvement ideas for...', promptPrefix: 'Suggest home improvement ideas for: ' },
+            { id: 'interior_design', name: 'Interior Design Ideas', icon: 'fas fa-couch', placeholder: 'Suggest interior design ideas for...', promptPrefix: 'Suggest interior design ideas for: ' },
+            { id: 'fashion_advice', name: 'Fashion Advice', icon: 'fas fa-tshirt', placeholder: 'Give fashion advice for...', promptPrefix: 'Give fashion advice for: ' },
+            { id: 'beauty_tips', name: 'Beauty Tips', icon: 'fas fa-spa', placeholder: 'Provide beauty tips for...', promptPrefix: 'Provide beauty tips for: ' },
+            { id: 'health_tips', name: 'Health Tips', icon: 'fas fa-heartbeat', placeholder: 'Provide health tips for...', promptPrefix: 'Provide health tips for: ' },
+            { id: 'mental_health_support', name: 'Mental Health Support', icon: 'fas fa-brain', placeholder: 'Provide supportive advice for mental health concerns like...', promptPrefix: 'Provide supportive advice for mental health concerns like: ' },
+            { id: 'finance_advisor', name: 'Finance Advisor', icon: 'fas fa-dollar-sign', placeholder: 'Give financial advice on...', promptPrefix: 'Give financial advice on: ' },
+            { id: 'investment_idea', name: 'Investment Idea', icon: 'fas fa-money-bill-wave', placeholder: 'Suggest investment ideas for...', promptPrefix: 'Suggest investment ideas for: ' },
+            { id: 'budget_planner', name: 'Budget Planner', icon: 'fas fa-wallet', placeholder: 'Help plan a budget for...', promptPrefix: 'Help plan a budget for: ' },
+            { id: 'time_management', name: 'Time Management Tips', icon: 'fas fa-hourglass-half', placeholder: 'Provide time management tips for...', promptPrefix: 'Provide time management tips for: ' },
+            { id: 'productivity_hacks', name: 'Productivity Hacks', icon: 'fas fa-rocket', placeholder: 'Suggest productivity hacks for...', promptPrefix: 'Suggest productivity hacks for: ' },
+            { id: 'public_speaking', name: 'Public Speaking Tips', icon: 'fas fa-bullhorn', placeholder: 'Give public speaking tips for...', promptPrefix: 'Give public speaking tips for: ' },
+            { id: 'negotiation_tips', name: 'Negotiation Tips', icon: 'fas fa-comments-dollar', placeholder: 'Provide negotiation tips for...', promptPrefix: 'Provide negotiation tips for: ' },
+            { id: 'conflict_resolution', name: 'Conflict Resolution', icon: 'fas fa-handshake-alt-slash', placeholder: 'Suggest ways to resolve conflict in...', promptPrefix: 'Suggest ways to resolve conflict in: ' },
+            { id: 'leadership_qualities', name: 'Leadership Qualities', icon: 'fas fa-crown', placeholder: 'Describe leadership qualities for...', promptPrefix: 'Describe leadership qualities for: ' },
+            { id: 'team_building', name: 'Team Building Ideas', icon: 'fas fa-users-cog', placeholder: 'Suggest team building ideas for...', promptPrefix: 'Suggest team building ideas for: ' },
+            { id: 'customer_retention', name: 'Customer Retention Strategies', icon: 'fas fa-user-tag', placeholder: 'Suggest customer retention strategies for...', promptPrefix: 'Suggest customer retention strategies for: ' },
+            { id: 'sales_pitch', name: 'Sales Pitch Draft', icon: 'fas fa-handshake', placeholder: 'Draft a sales pitch for...', promptPrefix: 'Draft a sales pitch for: ' },
+            { id: 'event_planning', name: 'Event Planning Guide', icon: 'fas fa-calendar-check', placeholder: 'Plan an event like...', promptPrefix: 'Plan an event like: ' },
+            { id: 'party_themes', name: 'Party Theme Ideas', icon: 'fas fa-cocktail', placeholder: 'Suggest party themes for...', promptPrefix: 'Suggest party themes for: ' },
+            { id: 'costume_ideas', name: 'Costume Ideas', icon: 'fas fa-mask', placeholder: 'Suggest costume ideas for...', promptPrefix: 'Suggest costume ideas for: ' },
+            { id: 'gift_wrap', name: 'Gift Wrapping Ideas', icon: 'fas fa-box-open', placeholder: 'Suggest gift wrapping ideas for...', promptPrefix: 'Suggest gift wrapping ideas for: ' },
+            { id: 'card_message', name: 'Greeting Card Message', icon: 'fas fa-birthday-cake', placeholder: 'Write a greeting card message for...', promptPrefix: 'Write a greeting card message for: ' },
+            { id: 'eulogy_draft', name: 'Eulogy Draft', icon: 'fas fa-cross', placeholder: 'Draft a eulogy for...', promptPrefix: 'Draft a eulogy for: ' },
+            { id: 'toast_speech', name: 'Toast Speech', icon: 'fas fa-glass-cheers', placeholder: 'Write a toast speech for...', promptPrefix: 'Write a toast speech for: ' },
+            { id: 'creative_writing_prompt', name: 'Creative Writing Prompt', icon: 'fas fa-edit', placeholder: 'Generate a creative writing prompt about...', promptPrefix: 'Generate a creative writing prompt about: ' },
+            { id: 'dialogue_writer', name: 'Dialogue Writer', icon: 'fas fa-comments', placeholder: 'Write a dialogue between...', promptPrefix: 'Write a dialogue between: ' },
+            { id: 'character_arc', name: 'Character Arc', icon: 'fas fa-chart-line', placeholder: 'Create a character arc for...', promptPrefix: 'Create a character arc for: ' },
+            { id: 'plot_twist', name: 'Plot Twist Idea', icon: 'fas fa-random', placeholder: 'Suggest a plot twist for...', promptPrefix: 'Suggest a plot twist for: ' },
+            { id: 'world_lore', name: 'World Lore Builder', icon: 'fas fa-scroll', placeholder: 'Build lore for a world about...', promptPrefix: 'Build lore for a world about: ' },
+            { id: 'fantasy_names', name: 'Fantasy Name Generator', icon: 'fas fa-dragon', placeholder: 'Generate fantasy names for...', promptPrefix: 'Generate fantasy names for: ' },
+            { id: 'sci_fi_concepts', name: 'Sci-Fi Concepts', icon: 'fas fa-space-shuttle', placeholder: 'Generate sci-fi concepts about...', promptPrefix: 'Generate sci-fi concepts about: ' },
+            { id: 'poetry_analysis', name: 'Poetry Analysis', icon: 'fas fa-magnifying-glass-chart', placeholder: 'Analyze this poem...', promptPrefix: 'Analyze the following poem: ' },
+            { id: 'song_analysis', name: 'Song Analysis', icon: 'fas fa-wave-square', placeholder: 'Analyze this song...', promptPrefix: 'Analyze the following song (lyrics or theme): ' },
+            { id: 'art_concept', name: 'Art Concept Idea', icon: 'fas fa-palette', placeholder: 'Generate an art concept for...', promptPrefix: 'Generate an art concept for: ' },
+            { id: 'photography_idea', name: 'Photography Idea', icon: 'fas fa-camera-retro', placeholder: 'Suggest a photography idea for...', promptPrefix: 'Suggest a photography idea for: ' },
+            { id: 'fashion_trend', name: 'Fashion Trend Analysis', icon: 'fas fa-shirt', placeholder: 'Analyze a fashion trend like...', promptPrefix: 'Analyze the fashion trend: ' },
+            { id: 'interior_style', name: 'Interior Style Guide', icon: 'fas fa-chair', placeholder: 'Suggest interior style for...', promptPrefix: 'Suggest interior design style for: ' },
+            { id: 'architecture_concept', name: 'Architecture Concept', icon: 'fas fa-building', placeholder: 'Generate an architecture concept for...', promptPrefix: 'Generate an architecture concept for: ' },
+            { id: 'urban_planning', name: 'Urban Planning Idea', icon: 'fas fa-city', placeholder: 'Suggest urban planning ideas for...', promptPrefix: 'Suggest urban planning ideas for: ' },
+            { id: 'science_explain', name: 'Science Explainer', icon: 'fas fa-atom', placeholder: 'Explain a scientific concept...', promptPrefix: 'Explain the scientific concept: ' },
+            { id: 'historical_event', name: 'Historical Event Explanation', icon: 'fas fa-history', placeholder: 'Explain a historical event...', promptPrefix: 'Explain the historical event: ' },
+            { id: 'biography_draft', name: 'Short Biography', icon: 'fas fa-address-card', placeholder: 'Write a short biography for...', promptPrefix: 'Write a short biography for: ' },
+            { id: 'ethical_framework', name: 'Ethical Framework', icon: 'fas fa-scale-balanced', placeholder: 'Explain an ethical framework like...', promptPrefix: 'Explain the ethical framework: ' },
+            { id: 'psychology_concept', name: 'Psychology Concept', icon: 'fas fa-brain', placeholder: 'Explain a psychology concept...', promptPrefix: 'Explain the psychology concept: ' },
+            { id: 'sociology_concept', name: 'Sociology Concept', icon: 'fas fa-users-viewfinder', placeholder: 'Explain a sociology concept...', promptPrefix: 'Explain the sociology concept: ' },
+            { id: 'economic_theory', name: 'Economic Theory', icon: 'fas fa-chart-line', placeholder: 'Explain an economic theory...', promptPrefix: 'Explain the economic theory: ' },
+            { id: 'political_analysis', name: 'Political Analysis', icon: 'fas fa-landmark', placeholder: 'Analyze a political topic...', promptPrefix: 'Analyze the political topic: ' },
+            { id: 'environmental_issue', name: 'Environmental Issue', icon: 'fas fa-leaf', placeholder: 'Explain an environmental issue...', promptPrefix: 'Explain the environmental issue: ' },
+            { id: 'health_condition', name: 'Health Condition Info', icon: 'fas fa-hospital', placeholder: 'Provide information on health condition...', promptPrefix: 'Provide information on the health condition: ' },
+            { id: 'medical_term', name: 'Medical Term Explainer', icon: 'fas fa-stethoscope', placeholder: 'Explain a medical term...', promptPrefix: 'Explain the medical term: ' },
+            { id: 'fitness_plan', name: 'Fitness Plan', icon: 'fas fa-dumbbell', placeholder: 'Create a fitness plan for...', promptPrefix: 'Create a fitness plan for: ' },
+            { id: 'nutrition_advice', name: 'Nutrition Advice', icon: 'fas fa-apple-alt', placeholder: 'Give nutrition advice for...', promptPrefix: 'Give nutrition advice for: ' },
+            { id: 'cooking_substitute', name: 'Cooking Substitute', icon: 'fas fa-mortar-pestle', placeholder: 'Suggest a substitute for... in cooking', promptPrefix: 'Suggest a cooking substitute for: ' },
+            { id: 'drink_recipe', name: 'Drink Recipe', icon: 'fas fa-cocktail', placeholder: 'Create a drink recipe for...', promptPrefix: 'Create a drink recipe for: ' },
+            { id: 'travel_tip', name: 'Travel Tip', icon: 'fas fa-map-marked-alt', placeholder: 'Give travel tips for...', promptPrefix: 'Give travel tips for: ' },
+            { id: 'local_guide', name: 'Local Guide', icon: 'fas fa-compass', placeholder: 'Act as a local guide for...', promptPrefix: 'Act as a local guide for: ' },
+            { id: 'cultural_insight', name: 'Cultural Insight', icon: 'fas fa-handshake-angle', placeholder: 'Provide cultural insight on...', promptPrefix: 'Provide cultural insight on: ' },
+            { id: 'language_learner', name: 'Language Learner', icon: 'fas fa-spell-check', placeholder: 'Help me learn a new language by...', promptPrefix: 'Help me learn a new language by: ' },
+            { id: 'writing_prompt', name: 'Writing Prompt', icon: 'fas fa-pen-fancy', placeholder: 'Generate a writing prompt about...', promptPrefix: 'Generate a writing prompt about: ' },
+            { id: 'story_continuation', name: 'Story Continuation', icon: 'fas fa-bookmark', placeholder: 'Continue this story...', promptPrefix: 'Continue the following story: ' },
+            { id: 'poem_analysis', name: 'Poem Analysis', icon: 'fas fa-search-plus', placeholder: 'Analyze this poem...', promptPrefix: 'Analyze the following poem: ' },
+            { id: 'script_idea', name: 'Script Idea', icon: 'fas fa-film', placeholder: 'Generate a script idea for...', promptPrefix: 'Generate a script idea for: ' },
+            { id: 'character_dialogue', name: 'Character Dialogue', icon: 'fas fa-user-friends', placeholder: 'Write a dialogue for...', promptPrefix: 'Write a dialogue for: ' },
+            { id: 'historical_fiction', name: 'Historical Fiction Idea', icon: 'fas fa-landmark', placeholder: 'Generate a historical fiction idea about...', promptPrefix: 'Generate a historical fiction idea about: ' },
+            { id: 'sci_fi_story', name: 'Sci-Fi Story Idea', icon: 'fas fa-space-station-moon', placeholder: 'Generate a sci-fi story idea about...', promptPrefix: 'Generate a sci-fi story idea about: ' },
+            { id: 'fantasy_story', name: 'Fantasy Story Idea', icon: 'fas fa-hat-wizard', placeholder: 'Generate a fantasy story idea about...', promptPrefix: 'Generate a fantasy story idea about: ' },
+            { id: 'mystery_plot', name: 'Mystery Plot Idea', icon: 'fas fa-user-secret', placeholder: 'Generate a mystery plot idea about...', promptPrefix: 'Generate a mystery plot idea about: ' },
+            { id: 'thriller_concept', name: 'Thriller Concept', icon: 'fas fa-bomb', placeholder: 'Generate a thriller concept about...', promptPrefix: 'Generate a thriller concept about: ' },
+            { id: 'horror_scenario', name: 'Horror Scenario', icon: 'fas fa-skull-crossbones', placeholder: 'Generate a horror scenario about...', promptPrefix: 'Generate a horror scenario about: ' },
+            // Tools 91 to 100 - Explicitly added as requested
+            { id: 'tool_91', name: 'Virtual Assistant', icon: 'fas fa-robot', placeholder: 'Ask your virtual assistant anything...', promptPrefix: 'Act as a virtual assistant and respond to: ' },
+            { id: 'tool_92', name: 'Code Reviewer', icon: 'fas fa-magnifying-glass-code', placeholder: 'Review this code snippet and provide feedback...', promptPrefix: 'Review the following code for improvements: ' },
+            { id: 'tool_93', name: 'Regex Generator', icon: 'fas fa-terminal', placeholder: 'Generate a regex for...', promptPrefix: 'Generate a regular expression for: ' },
+            { id: 'tool_94', name: 'JSON Formatter', icon: 'fas fa-file-code', placeholder: 'Format this JSON string...', promptPrefix: 'Format the following JSON: ' },
+            { id: 'tool_95', name: 'CSV to JSON', icon: 'fas fa-table', placeholder: 'Convert this CSV data to JSON...', promptPrefix: 'Convert the following CSV data to JSON: ' },
+            { id: 'tool_96', name: 'SQL Query Builder', icon: 'fas fa-database', placeholder: 'Build an SQL query for...', promptPrefix: 'Build an SQL query for: ' },
+            { id: 'tool_97', name: 'Shell Command Guide', icon: 'fas fa-laptop-code', placeholder: 'Explain this shell command...', promptPrefix: 'Explain the shell command: ' },
+            { id: 'tool_98', name: 'Network Troubleshooter', icon: 'fas fa-network-wired', placeholder: 'Troubleshoot this network issue...', promptPrefix: 'Troubleshoot the following network issue: ' },
+            { id: 'tool_99', name: 'Cloud Computing Explainer', icon: 'fas fa-cloud', placeholder: 'Explain a cloud computing concept...', promptPrefix: 'Explain the cloud computing concept: ' },
+            { id: 'tool_100', name: 'Cybersecurity Advisor', icon: 'fas fa-shield-alt', placeholder: 'Provide advice on cybersecurity for...', promptPrefix: 'Provide cybersecurity advice on: ' },
+            // You can add many more tools after this!
+        ];
+
+        // --- Function to render tool cards ---
+        function renderTools(filteredTools) {
+            toolGrid.innerHTML = ''; // Clear existing tools
+            filteredTools.forEach(tool => {
+                const toolCard = document.createElement('div');
+                toolCard.classList.add('tool-card');
+                if (tool.id === currentMode) {
+                    toolCard.classList.add('active');
+                }
+                toolCard.dataset.mode = tool.id;
+                toolCard.innerHTML = `
+                    <i class="${tool.icon}"></i>
+                    <span>${tool.name}</span>
+                `;
+                toolCard.addEventListener('click', () => selectTool(tool));
+                toolGrid.appendChild(toolCard);
+            });
+        }
+
+        // --- Function to select a tool ---
+        function selectTool(tool) {
+            // Remove active class from all tool cards
+            document.querySelectorAll('.tool-card').forEach(card => card.classList.remove('active'));
+            // Add active class to the clicked tool card
+            document.querySelector(`.tool-card[data-mode="${tool.id}"]`).classList.add('active');
+
+            currentMode = tool.id;
+            promptInput.placeholder = tool.placeholder;
+            responseArea.textContent = "Your AI-generated content will appear here..."; // Clear previous response
+            responseArea.classList.remove('error'); // Remove error styling if present
+        }
+
+        // --- Function to filter tools based on search input ---
+        function filterTools() {
+            const searchTerm = document.getElementById('toolSearch').value.toLowerCase();
+            const filtered = toolsConfig.filter(tool =>
+                tool.name.toLowerCase().includes(searchTerm) ||
+                tool.placeholder.toLowerCase().includes(searchTerm) ||
+                tool.id.toLowerCase().includes(searchTerm)
+            );
+            renderTools(filtered);
+        }
+
+        // --- Initialize on page load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTools(toolsConfig); // Render all tools initially
+            // Select the default tool (General Chat) on load
+            const defaultTool = toolsConfig.find(tool => tool.id === currentMode);
+            if (defaultTool) {
+                selectTool(defaultTool);
+            }
+        });
+
+        // --- Main function to call Gemini API ---
+        async function getGeminiResponse() {
+            const prompt = promptInput.value.trim();
+            const selectedTool = toolsConfig.find(tool => tool.id === currentMode);
+
+            if (!prompt) {
+                responseArea.innerHTML = "<p style='color: #d32f2f; font-weight: bold;'>Please enter a prompt!</p>";
+                responseArea.classList.add('error');
+                return;
+            }
+
+            responseArea.textContent = "Generating content... (This will be fast!)";
+            responseArea.classList.remove('error'); // Clear previous error state
+            loadingIndicator.style.display = 'inline-block'; // Show loading dots
+            promptInput.disabled = true; // Disable input during generation
+            document.querySelector('.action-button').disabled = true; // Disable button
+
+            // The AI's definition is now part of the `promptPrefix` for the 'general' mode.
+            // For other modes, it will only use their specific prefix.
+            let formattedPrompt = selectedTool.promptPrefix + prompt;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: formattedPrompt }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.8, // Adjust creativity (0.0 - 1.0)
+                            maxOutputTokens: 1500, // Allow for longer responses
+                            topP: 0.95, // Diversify output
+                            topK: 60 // Control randomness
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    // Attempt to parse specific error message from Google's API
+                    const errorMessage = errorData.error && errorData.error.message ? errorData.error.message : 'Unknown API error. Check browser console.';
+                    throw new Error(`API error: ${response.status} - ${errorMessage}`);
+                }
+
+                const data = await response.json();
+                console.log(data); // Log the full response for debugging
+
+                if (data.candidates && data.candidates.length > 0 &&
+                    data.candidates[0].content && data.candidates[0].content.parts &&
+                    data.candidates[0].content.parts.length > 0 && data.candidates[0].content.parts[0].text) {
+                    responseArea.textContent = data.candidates[0].content.parts[0].text;
+                } else {
+                    responseArea.innerHTML = "<p style='color: #d32f2f; font-weight: bold;'>No valid response from Gemini. It might have refused the prompt or encountered an internal issue. Please try again with a different query.</p>";
+                    responseArea.classList.add('error');
+                }
+
+            } catch (error) {
+                console.error("Error fetching from Gemini API:", error);
+                responseArea.innerHTML = `<p style='color: #d32f2f; font-weight: bold;'>Error: ${error.message}. Please try again later. Check the console for more details.</p>`;
+                responseArea.classList.add('error');
+            } finally {
+                loadingIndicator.style.display = 'none'; // Hide loading dots
+                promptInput.disabled = false; // Re-enable input
+                document.querySelector('.action-button').disabled = false; // Re-enable button
+            }
+        }
+    </script>
+</body>
+</html>
